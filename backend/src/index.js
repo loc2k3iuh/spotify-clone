@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";    
+import cors from "cors";
 import userRoutes from "./routes/user.route.js"
 import adminRoutes from "./routes/admin.route.js"
 import authRoutes from "./routes/auth.route.js"
@@ -17,8 +18,14 @@ dotenv.config();
 const app = express();
 const __dirname = path.resolve();
 
-const PORT = process.env.PORT; 
+const PORT = process.env.PORT || 5000; 
 app.use(express.json()); 
+app.use(cors(
+    {
+        origin: "http://localhost:3000",
+        credentials: true, // Allow cookies to be sent
+    }
+));
 
 app.use(clerkMiddleware());
 app.use(fileUpload({
