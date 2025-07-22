@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMusicStore } from "@/stores/useMusicStore";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
+
 import { Clock, Play } from "lucide-react";
 import React, { use, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -25,8 +26,8 @@ const AlbumPage = () => {
   if (isLoading) return null;
 
   return (
-    <div className="h-full">
-      <ScrollArea className="h-full">
+    <div className="h-full rounded-lg bg-gradient-to-b from-zinc-800 to-zinc-900 overflow-hidden ">
+      <ScrollArea className=" rounded-md">
         {/* Main Content */}
         <div className="relative min-h-full">
           {/* bg gradient */}
@@ -90,7 +91,7 @@ const AlbumPage = () => {
               <Button
                 size="icon"
                 className="w-14 h-14 rounded-full bg-green-500 hover:bg-green-400 
-                hover:scale-105 transition-all cursor-pointer"
+                hover:scale-105 transition-all cursor-pointer transition-all"
               >
                 <Play className="h-7 w-7 text-black" />
               </Button>
@@ -108,7 +109,7 @@ const AlbumPage = () => {
                   <Clock className="h-4 w-4" />
                 </div>
               </div>
-              <div className="px-6 ">
+              <div className='px-6'>
                 <div className="space-y-2 py-4 ">
                   {currentAlbum?.songs.map((song, index) => (
                     <div

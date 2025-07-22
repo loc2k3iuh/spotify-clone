@@ -2,9 +2,11 @@ import { SignedIn, SignedOut, SignOutButton, UserButton } from "@clerk/clerk-rea
 import { LayoutDashboardIcon, Music } from "lucide-react";
 import { Link } from "react-router-dom";
 import SignInOAuthButtons from "./SignInOAuthButtons";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const Topbar = () => {
-  const isAdmin = false; // Replace with actual admin check logic
+  const { isAdmin } = useAuthStore(); // Replace with actual admin check logic
+  console.log("isAdmin:", isAdmin);
   return (
     <div className="flex items-center justify-between p-4 sticky top-0 bg-zinc-900/75 backdrop-blur-md z-10 border-b border-zinc-800">
       <div className="flex gap-2 items-center">
