@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import FeaturedSection from "./components/FeaturedSection";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import SectionGrid from "./components/SectionGrid";
+import { usePlayerStore } from "@/stores/usePlayerStore";
 
 const HomePage = () => {
   const [greeting, setGreeting] = useState("");
@@ -17,6 +18,8 @@ const HomePage = () => {
     trendingSongs,
     featuredSongs,
   } = useMusicStore();
+
+  const { initializeQueue } = usePlayerStore();
 
   // Function to get current greeting based on time
   const getGreeting = () => {
@@ -50,12 +53,13 @@ const HomePage = () => {
     fetchTrendingSongs();
   }, [fetchFeaturedSongs, fetchMadeForYouSongs, fetchTrendingSongs]);
 
-  console.log("Song madeForYouSongs: ", {
-    isLoading,
-    madeForYouSongs,
-    featuredSongs,
-    trendingSongs,
-  });
+  
+  useEffect(() => {
+    if(madeForYouSongs.length > 0 && featuredSongs.length > 0 && trendingSongs.length > 0){
+      const allSongs = [...featuredSongs, ...madeForYouSongs, ...trendingSongs];
+      initializeQueue(allSongs);
+    }
+  },[initializeQueue, madeForYouSongs, trendingSongs, featuredSongs]);
 
   return (
     <main className=" rounded-md overflow-hidden h-full bg-gradient-to-b from-zinc-800 to-zinc-900">
