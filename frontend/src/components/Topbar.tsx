@@ -10,10 +10,8 @@ const Topbar = () => {
   return (
     <div className="flex items-center justify-between p-4 sticky top-0 bg-zinc-900/75 backdrop-blur-md z-10 border-b border-zinc-800">
       <div className="flex gap-2 items-center">
-        <Music className="size-8 text-emerald-500" />
-        <span className="text-2xl font-bold bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">
-          Spotify
-        </span>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg" alt="Spotify Logo" className="h-9" />
+
       </div>
       
       <div className="flex items-center gap-4">
@@ -36,11 +34,7 @@ const Topbar = () => {
                 }
               }}
             />
-            <SignOutButton>
-              <button className="px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition-colors text-sm font-medium">
-                Sign Out
-              </button>
-            </SignOutButton>
+         
           </div>
         </SignedIn>
 
