@@ -22,7 +22,7 @@ export const getStats = async (req, res, next) => {
             },
           },
           {
-            $count: "count ",
+            $count: "count",
           },
         ]),
       ]);
