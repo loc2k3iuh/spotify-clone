@@ -95,15 +95,17 @@ const AddSongDialog = () => {
           Add Song
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-zinc-900 border-zinc-700 max-h-[80vh] overflow-auto">
-        <DialogHeader>
+      <DialogContent className="bg-zinc-900 border-zinc-700 max-w-2xl max-h-[95vh] flex flex-col">
+        <DialogHeader className="flex-shrink-0 pb-2">
           <DialogTitle> Add New Song</DialogTitle>
           <DialogDescription>
             Add a new song to your music library
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-4">
+        <div className="flex-1 min-h-0">
+          <div className="px-4 -mx-4">
+            <div className="space-y-2 pb-2">
           <input
             type="file"
             accept="audio/*"
@@ -126,12 +128,12 @@ const AddSongDialog = () => {
 
           {/* image upload area */}
           <div
-            className="flex items-center justify-center p-6 border-2 border-dashed border-zinc-700 rounded-lg cursor-pointer"
+            className="flex items-center justify-center p-3 border-2 border-dashed border-zinc-700 rounded-lg cursor-pointer"
             onClick={() => imageInputRef.current?.click()}
           >
             <div className="text-center">
               {files.image ? (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <div className="text-sm text-emerald-500">
                     Image selected:
                   </div>
@@ -141,10 +143,10 @@ const AddSongDialog = () => {
                 </div>
               ) : (
                 <>
-                  <div className="p-3 bg-zinc-800 rounded-full inline-block mb-2">
-                    <Upload className="h-6 w-6 text-zinc-400" />
+                  <div className="p-2 bg-zinc-800 rounded-full inline-block mb-1">
+                    <Upload className="h-4 w-4 text-zinc-400" />
                   </div>
-                  <div className="text-sm text-zinc-400 mb-2">
+                  <div className="text-sm text-zinc-400 mb-1">
                     Upload artwork
                   </div>
                   <Button
@@ -160,7 +162,7 @@ const AddSongDialog = () => {
           </div>
 
           {/* Audio upload */}
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label className="text-sm font-medium">Audio File</label>
             <div className="flex items-center gap-2">
               <Button
@@ -176,7 +178,7 @@ const AddSongDialog = () => {
           </div>
 
           {/* other fields */}
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label className="text-sm font-medium">Title</label>
             <Input
               value={newSong.title}
@@ -187,7 +189,7 @@ const AddSongDialog = () => {
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label className="text-sm font-medium">Artist</label>
             <Input
               value={newSong.artist}
@@ -198,7 +200,7 @@ const AddSongDialog = () => {
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label className="text-sm font-medium">Duration (seconds)</label>
             <Input
               type="number"
@@ -210,7 +212,7 @@ const AddSongDialog = () => {
               className="bg-zinc-800 border-zinc-700"
             />
           </div>
-          <div className="space-y-2">
+          <div className="space-y-1">
             <label className="text-sm font-medium">Album (Optional)</label>
             <Select
               value={newSong.album}
@@ -231,8 +233,11 @@ const AddSongDialog = () => {
               </SelectContent>
             </Select>
           </div>
+            </div>
+          </div>
         </div>
-        <DialogFooter>
+        
+        <DialogFooter className="flex-shrink-0 border-t border-zinc-800 pt-3 mt-2">
           <Button
             variant="outline"
             onClick={() => setsongDialogOpen(false)}
