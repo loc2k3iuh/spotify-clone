@@ -12,11 +12,18 @@ import { clerkMiddleware } from '@clerk/express'
 import fileUpload from "express-fileupload";
 import path from "path";
 import { error } from "console";
+import { createServer } from "http";
+import { initializeSocket } from "./lib/socket.js";
 
 dotenv.config();
 
+
 const app = express();
 const __dirname = path.resolve();
+
+const httpServer = createServer(app);
+initializeSocket(httpServer);
+
 
 const PORT = process.env.PORT || 5000; 
 app.use(express.json()); 
@@ -47,7 +54,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({message: process.env.NODE_ENV === "production" ? "Internal Server Error" : err.message});
 })
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
     console.log("Server is running on port 5000");
     connectDB();
 })
