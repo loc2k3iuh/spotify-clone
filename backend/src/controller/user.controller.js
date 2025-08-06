@@ -12,6 +12,7 @@ export const getAllUsers = async (req, res, next) => {
 };
 
 export const getMessages = async (req, res, next) => {
+  debugger
   try {
     const myId = req.auth.userId;
     const { userId } = req.params;
@@ -27,6 +28,7 @@ export const getMessages = async (req, res, next) => {
         },
       ],
     }).sort({ createAt: 1 });
+    res.status(200).json(messages);
   } catch (error) {
     next(error);
   }

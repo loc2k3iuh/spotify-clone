@@ -1,20 +1,23 @@
 import { axiosInstance } from "@/lib/axios";
-import type { Message } from "@/types";
+import type { Message, User } from "@/types";
 import { create } from "zustand";
 import { io } from "socket.io-client";
 
 interface ChatStore {
   socket: any;
-  users: any[];
+  users: User[];
   isLoading: boolean;
   messages: Message[];
   isConnected: boolean;
   error: string | null;
   onlineUsers: Set<string>;
+  selectedUser: User | null;
   disconnectSocket: () => void;
   fetchUsers: () => Promise<void>;
   userActivities: Map<string, string>;
   initSocket: (userId: string) => void;
+  fetchMessages: (userId: string) => void;
+  setSelectedUser: (user: User | null) => void;
   sendMessage: (receiverId: string, senderId: string, content: string) => void;
 }
 
@@ -28,12 +31,15 @@ const socket = io(baseURL, {
 export const useChatStore = create<ChatStore>((set, get) => ({
   users: [],
   error: null,
-  socket: null,
+  socket: socket,
   messages: [],
   isLoading: false,
+  selectedUser: null,
   isConnected: false,
   onlineUsers: new Set(),
   userActivities: new Map(),
+
+  setSelectedUser: (user) => set({ selectedUser: user }),
 
   fetchUsers: async () => {
     set({ isLoading: true, error: null });
@@ -51,7 +57,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       socket.auth = { userId };
       socket.connect();
       socket.emit("user_connected", userId);
-      socket.on("user_online", (users: string[]) => {
+      socket.on("users_online", (users: string[]) => {
         set({ onlineUsers: new Set(users) });
       });
 
@@ -103,6 +109,23 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
   sendMessage: (receiverId, senderId, content) => {
+    const socket = get().socket;
+    if (!socket) {
+      return;
+    }
+    socket.emit("send_message", { receiverId, senderId, content });
+  },
 
+  fetchMessages: async (userId) => {
+    debugger
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axiosInstance.get(`/users/messages/${userId}`);
+      set({ messages: response.data });
+    } catch (error: any) {
+      set({ error: error.response.data.message });
+    } finally {
+      set({ isLoading: false });
+    }
   },
 }));
