@@ -2,6 +2,7 @@ import { axiosInstance } from "@/lib/axios";
 import type { Message, User } from "@/types";
 import { create } from "zustand";
 import { io } from "socket.io-client";
+import { useAuth } from "@clerk/clerk-react";
 
 interface ChatStore {
   socket: any;
@@ -17,6 +18,7 @@ interface ChatStore {
   userActivities: Map<string, string>;
   initSocket: (userId: string) => void;
   fetchMessages: (userId: string) => void;
+  deleteMessage: (messageId: string) => void;
   setSelectedUser: (user: User | null) => void;
   sendMessage: (receiverId: string, senderId: string, content: string) => void;
 }
@@ -99,6 +101,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         });
       });
 
+      socket.on("message_deleted", ({ messageId }) => {
+        set((state) => ({
+          messages: state.messages.filter((msg) => msg._id !== messageId),
+        }));
+      });
+
       set({ isConnected: true });
     }
   },
@@ -117,7 +125,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   },
 
   fetchMessages: async (userId) => {
-    debugger
+    debugger;
     set({ isLoading: true, error: null });
     try {
       const response = await axiosInstance.get(`/users/messages/${userId}`);
@@ -127,5 +135,23 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     } finally {
       set({ isLoading: false });
     }
+  },
+
+  deleteMessage: (messageId) => {
+    const { socket, selectedUser, messages } = get();
+  
+    if (!socket || !selectedUser) return;
+
+    // Find the message to get sender and receiver info
+    const messageToDelete = messages.find((msg) => msg._id === messageId);
+    console.log("Message deleted", messageToDelete);
+    if (!messageToDelete) return;
+
+    // Emit delete event to server
+    socket.emit("delete_message", {
+      messageId,
+      senderId: messageToDelete.senderId,
+      receiverId: messageToDelete.receiverId,
+    });
   },
 }));

@@ -54,17 +54,41 @@ export const initializeSocket = (server) => {
       }
     });
 
+    socket.on("delete_message", async (data) => {
+      try {
+        const { messageId, senderId, receiverId } = data;
+
+        const deleteMessage = await Message.findOneAndDelete({
+          _id: messageId,
+          senderId: senderId,
+        });
+
+        if (deleteMessage) {
+          const receiverSocketId = userSockets.get(receiverId);
+          if (receiverSocketId) {
+            io.to(receiverSocketId).emit("message_deleted", { messageId });
+          }
+          socket.emit("message_deleted", { messageId });
+        } else {
+          socket.emit("delete_error", "Message not found or unathorized");
+        }
+      } catch (error) {
+        console.log("Delete Message Error", error);
+        socket.emit("delete_error", error.message);
+      }
+    });
+
     socket.on("disconnect", () => {
       let disconnectedUserId;
       for (const [userId, socketId] of userSockets.entries()) {
         if (socketId === socket.id) {
           disconnectedUserId = userId;
           userSockets.delete(userId);
-          userActivities.delete(userId);  
+          userActivities.delete(userId);
           break;
         }
       }
-      if(disconnectedUserId){
+      if (disconnectedUserId) {
         io.emit("user_disconnected", disconnectedUserId);
       }
     });

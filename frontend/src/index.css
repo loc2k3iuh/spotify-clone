@@ -76,6 +76,8 @@
   --sidebar-ring: oklch(0.723 0.219 149.579);
 }
 
+
+
 .dark {
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
@@ -117,4 +119,53 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+/* ...existing code... */
+
+/* Custom Scrollbar Styles */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Beautiful Custom Scrollbar */
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: #52525b #18181b;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: #18181b;
+  border-radius: 10px;
+  margin: 4px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #52525b 0%, #3f3f46 100%);
+  border-radius: 10px;
+  border: 1px solid #27272a;
+  transition: background 0.2s ease;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #71717a 0%, #52525b 100%);
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, #84cc16 0%, #65a30d 100%);
+}
+
+/* Scrollbar Corner */
+.scrollbar-custom::-webkit-scrollbar-corner {
+  background: #18181b;
 }
